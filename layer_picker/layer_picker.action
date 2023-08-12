@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Scripts">
+    <Actions category="Scripts">
+        <text>LayerPicker</text>
+
+        <Action name="LayerPicker">
+            <icon/>
+            <text>LayerPicker</text>
+            <whatsThis/>
+            <toolTip/>
+            <iconText/>
+            <activationFlags>10000</activationFlags>
+            <activationConditions>0</activationConditions>
+            <shortcut>shift+a</shortcut>
+            <isCheckable>false</isCheckable>
+            <statusTip/>
+        </Action>
+    </Actions>
+</ActionCollection>

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=layer_picker
+X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
+Name=layer_picker
+Comment=Getting an extension set up
