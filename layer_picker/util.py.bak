@@ -74,7 +74,7 @@ def get_cursor_in_document_coords():
 def __searchCurrentTool(w):
     for c in w.children():
         if isinstance(c, QToolButton) and c.isChecked():
-            return c
+            return c.objectName()
         nm = __searchCurrentTool(c)
         if nm:
             return nm
@@ -85,58 +85,4 @@ def getCurrentTool():
                  if w.objectName() == 'ToolBox'), None)
     if qdock is None:
         ValueError('ToolBox is not found. Please enable ToolBox docker.')
-    return __searchCurrentTool(qdock).objectName()
-
-
-def __searchToolOptionDocker():
-    qdock = next((w for w in Krita.instance().dockers()
-                 if w.objectName() == 'sharedtooldocker'), None)
-    if qdock is None:
-        ValueError(
-            'ToolBoxOption is not found. Please enable ToolBoxOption docker.')
-    return qdock
-
-
-def __searchColorSamplerSourcesCombobox(w):
-    for c in w.children():
-        if c.objectName() == 'cmbSources':  # under "KritaSelected/KisToolColorSampler option widget"
-            return c
-        nm = __searchColorSamplerSourcesCombobox(c)
-        if nm:
-            return nm
-
-
-def getColorSamplerSources():
-    qdock = __searchToolOptionDocker()
-    combo = __searchColorSamplerSourcesCombobox(qdock)
-    # 0:all layer
-    # 1:current layer
-    return combo.currentIndex()
-
-
-def setColorSamplerSources(index):
-    qdock = __searchToolOptionDocker()
-    combo = __searchColorSamplerSourcesCombobox(qdock)
-    # 0:all layer
-    # 1:current layer
-    combo.setCurrentIndex(index)
-
-
-def __searchColorSamplerRadius(w):
-    for c in w.children():
-        if c.objectName() == 'radius':
-            return c
-        nm = __searchColorSamplerRadius(c)
-        if nm:
-            return nm
-
-
-def getColorSamplerRadius():
-    qdock = __searchToolOptionDocker()
-    combo = __searchColorSamplerRadius(qdock)
-    return combo.value()
-
-def setColorSamplerRadius(val):
-    qdock = __searchToolOptionDocker()
-    combo = __searchColorSamplerRadius(qdock)
-    combo.setValue(val)
+    return __searchCurrentTool(qdock)

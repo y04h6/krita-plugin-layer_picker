@@ -11,7 +11,6 @@ from PyQt5.QtCore import (
 
 from .util import *
 
-
 class Hook(QObject):
     _target_key = Qt.Key_F10
 
@@ -33,7 +32,7 @@ class Hook(QObject):
 
 
 class ExtensionModel():
-    onPickedCallback = None
+    onPickedCallback=None
 
     def __init__(self):
         pass
@@ -55,16 +54,8 @@ class ExtensionModel():
     #     pass
 
     def beginCaptureMode(self):
-        # inst = Krita.instance()
-        # view = inst.activeWindow().activeView()
-        # self.lastForgroundColor = view.foregroundColor()
-        self.lastToolName = getCurrentTool()  # backup tool
+        self.lastToolName=getCurrentTool()
         Krita.instance().action('KritaSelected/KisToolColorSampler').trigger()
-        self.lastColorSamplerSources = getColorSamplerSources()  # backup ColorSamplerSources
-        setColorSamplerSources(0)  # set all layer source
-        self.lastColorSamplerRadius = getColorSamplerRadius()  # backup ColorSamplerRadius
-        setColorSamplerRadius(1)  # set Radius
-
         self.hook = Hook()
         self.app = QCoreApplication.instance()
 
@@ -72,7 +63,7 @@ class ExtensionModel():
         self.is_dragging = False
 
         self.hook.mouse_press.connect(self.onMousePress)
-        # self.hook.mouse_move.connect(self.onMouseMove)
+        #self.hook.mouse_move.connect(self.onMouseMove)
 
     def run(self):
         inst = Krita.instance()
@@ -87,17 +78,13 @@ class ExtensionModel():
             if self.foundNode:
                 doc.setActiveNode(self.foundNode)
             if self.lastToolName:
-                setColorSamplerSources(
-                    self.lastColorSamplerSources)  # restore setting
-                setColorSamplerRadius(self.lastColorSamplerRadius)
-                Krita.instance().action(self.lastToolName).trigger()  # restore tool
-            # view.setForeGroundColor(self.lastForgroundColor)
+                Krita.instance().action(self.lastToolName).trigger()
 
     def checkRecursive(self, nodes, pos):
         for child in reversed(nodes):
             if child.opacity() > 0 and child.visible():
                 if child.type() == 'paintlayer' or child.type() == 'vectorlayer':
-                    # TODO:vectorLayerのピクセルデータ参照の仕方がわからない
+                    #TODO:vectorLayerのピクセルデータ参照の仕方がわからない
                     color = child.pixelData(pos.x(), pos.y(), 1, 1)
                     if color:
                         (b, g, r, a) = color
