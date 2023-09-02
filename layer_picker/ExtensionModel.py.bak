@@ -9,7 +9,7 @@ from PyQt5.QtCore import (
     QCoreApplication
 )
 
-from .util import *
+from .util import get_cursor_in_document_coords
 
 class Hook(QObject):
     _target_key = Qt.Key_F10
@@ -54,7 +54,6 @@ class ExtensionModel():
     #     pass
 
     def beginCaptureMode(self):
-        self.lastToolName=getCurrentTool()
         Krita.instance().action('KritaSelected/KisToolColorSampler').trigger()
         self.hook = Hook()
         self.app = QCoreApplication.instance()
@@ -77,8 +76,6 @@ class ExtensionModel():
             self.checkRecursive(doc.topLevelNodes(), doc_pos)
             if self.foundNode:
                 doc.setActiveNode(self.foundNode)
-            if self.lastToolName:
-                Krita.instance().action(self.lastToolName).trigger()
 
     def checkRecursive(self, nodes, pos):
         for child in reversed(nodes):
