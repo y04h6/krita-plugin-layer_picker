@@ -11,7 +11,6 @@ from PyQt5.QtGui import (
 
 from PyQt5.QtWidgets import *
 
-import os
 
 # get_cursor_in_document_coords
 # https://krita-artists.org/t/hot-to-get-the-mouse-position-in-a-plugin/41012/5
@@ -21,9 +20,10 @@ def __get_q_view(view):
     q_window = window.qwindow()
     q_stacked_widget = q_window.centralWidget()
     q_mdi_area = q_stacked_widget.findChild(QMdiArea)
-    for q_mdi_view in q_mdi_area.subWindowList():
-        if os.path.basename(view.document().fileName()) == q_mdi_view.windowTitle():
-            return q_mdi_view.widget()
+    subWindow = q_mdi_area.currentSubWindow()
+    if subWindow:
+        return subWindow.widget()
+    ValueError("Not found current mdi sub window")
 
 
 def __get_q_canvas(q_view):
