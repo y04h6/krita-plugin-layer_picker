@@ -11,6 +11,8 @@ from PyQt5.QtCore import (
 
 from .util import *
 
+from PyQt5.QtWidgets import (
+        QToolTip,)
 
 class Hook(QObject):
     _target_key = Qt.Key_F10
@@ -34,6 +36,7 @@ class Hook(QObject):
 
 class ExtensionModel():
     onPickedCallback = None
+    pickPos = QPointF()
 
     def __init__(self):
         pass
@@ -79,11 +82,9 @@ class ExtensionModel():
         view = inst.activeWindow().activeView()
         doc = view.document()
         if doc:
-            center = QPointF(0.5 * doc.width(), 0.5 * doc.height())
-            p = get_cursor_in_document_coords()
-            doc_pos = p + center
+            self.pickPos = get_cursor_in_document_coords()
             self.foundNode = None
-            self.checkRecursive(doc.topLevelNodes(), doc_pos)
+            self.checkRecursive(doc.topLevelNodes(), self.pickPos)
             if self.foundNode:
                 doc.setActiveNode(self.foundNode)
             if self.lastToolName:

@@ -11,17 +11,18 @@ from PyQt5.QtGui import (
 
 from PyQt5.QtWidgets import *
 
+import os
+
 # get_cursor_in_document_coords
 # https://krita-artists.org/t/hot-to-get-the-mouse-position-in-a-plugin/41012/5
-
 
 def __get_q_view(view):
     window = view.window()
     q_window = window.qwindow()
     q_stacked_widget = q_window.centralWidget()
     q_mdi_area = q_stacked_widget.findChild(QMdiArea)
-    for v, q_mdi_view in zip(window.views(), q_mdi_area.subWindowList()):
-        if v == view:
+    for q_mdi_view in q_mdi_area.subWindowList():
+        if os.path.basename(view.document().fileName()) == q_mdi_view.windowTitle():
             return q_mdi_view.widget()
 
 
@@ -66,7 +67,8 @@ def get_cursor_in_document_coords():
         global_pos = QCursor.pos()
         local_pos = q_canvas.mapFromGlobal(global_pos)
         center = q_canvas.rect().center()
-        return transform_inv.map(local_pos - QPointF(center))
+        doc = view.document()
+        return transform_inv.map(local_pos - QPointF(center)) + QPointF(0.5 * doc.width(), 0.5 * doc.height())
 
 # getCurrentTool
 
@@ -135,6 +137,7 @@ def getColorSamplerRadius():
     qdock = __searchToolOptionDocker()
     combo = __searchColorSamplerRadius(qdock)
     return combo.value()
+
 
 def setColorSamplerRadius(val):
     qdock = __searchToolOptionDocker()
